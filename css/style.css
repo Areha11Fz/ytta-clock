@@ -36,6 +36,12 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.modal-open {
+    opacity: 1;
 }
 
 .modal-content {
@@ -46,6 +52,12 @@ body {
     width: 80%;
     max-width: 500px;
     text-align: center;
+    transform: translateY(-50px);
+    transition: transform 0.3s ease;
+}
+
+.modal.modal-open .modal-content {
+    transform: translateY(0);
 }
 
 .close-button {
@@ -60,4 +72,29 @@ body {
     color: #fff;
     text-decoration: none;
     cursor: pointer;
+}
+
+.setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+
+#offset-subtitle {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+#sync-now-button {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+#sync-now-button:hover {
+    background-color: #555;
 }
