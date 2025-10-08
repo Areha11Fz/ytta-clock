@@ -182,7 +182,11 @@ const progressBar = document.getElementById('progress-bar');
 function checkTargetTimes(now) {
     const targets = [];
     targetTimeList.querySelectorAll('li').forEach(item => {
-        targets.push(item.firstChild.textContent);
+        const spans = item.querySelectorAll('span.editable');
+        if (spans.length === 4) {
+            const timeString = `${spans[0].textContent}:${spans[1].textContent}:${spans[2].textContent}.${spans[3].textContent}`;
+            targets.push(timeString);
+        }
     });
 
     if (targets.length === 0) {
