@@ -165,3 +165,17 @@ body {
     align-items: center;
     padding: 5px 0;
 }
+
+.editable {
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.editable-input {
+    width: 40px;
+    padding: 2px;
+    background-color: #444;
+    border: 1px solid #888;
+    color: #fff;
+    text-align: center;
+}

@@ -84,7 +84,11 @@ const targetTimeList = document.getElementById('target-time-list');
 function saveTargets() {
     const targets = [];
     targetTimeList.querySelectorAll('li').forEach(item => {
-        targets.push(item.firstChild.textContent);
+        const spans = item.querySelectorAll('span.editable');
+        if (spans.length === 4) {
+            const timeString = `${spans[0].textContent}:${spans[1].textContent}:${spans[2].textContent}.${spans[3].textContent}`;
+            targets.push(timeString);
+        }
     });
     localStorage.setItem(LOCAL_STORAGE_KEYS.targetTimes, JSON.stringify(targets));
 }
@@ -99,7 +103,21 @@ function loadTargets() {
 
 function createTargetListItem(targetText) {
     const listItem = document.createElement('li');
-    listItem.textContent = targetText;
+
+    const timeParts = targetText.split(/[:.]/);
+
+    const hourSpan = createEditableSpan(timeParts[0], 2);
+    const minuteSpan = createEditableSpan(timeParts[1], 2);
+    const secondSpan = createEditableSpan(timeParts[2], 2);
+    const millisecondSpan = createEditableSpan(timeParts[3], 3);
+
+    listItem.appendChild(hourSpan);
+    listItem.appendChild(document.createTextNode(':'));
+    listItem.appendChild(minuteSpan);
+    listItem.appendChild(document.createTextNode(':'));
+    listItem.appendChild(secondSpan);
+    listItem.appendChild(document.createTextNode('.'));
+    listItem.appendChild(millisecondSpan);
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = '×';
@@ -111,6 +129,37 @@ function createTargetListItem(targetText) {
 
     listItem.appendChild(deleteButton);
     return listItem;
+}
+
+function createEditableSpan(value, padLength) {
+    const span = document.createElement('span');
+    span.textContent = value;
+    span.classList.add('editable');
+
+    span.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = span.textContent;
+        input.classList.add('editable-input');
+
+        span.replaceWith(input);
+        input.focus();
+
+        input.addEventListener('blur', () => {
+            let newValue = input.value.padStart(padLength, '0');
+            const newSpan = createEditableSpan(newValue, padLength);
+            input.replaceWith(newSpan);
+            saveTargets();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                input.blur();
+            }
+        });
+    });
+
+    return span;
 }
 
 addTargetButton.addEventListener('click', () => {
