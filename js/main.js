@@ -126,6 +126,55 @@ addTargetButton.addEventListener('click', () => {
     saveTargets();
 });
 
+let triggeredTargets = [];
+
+function checkTargetTimes(now) {
+    const targets = [];
+    targetTimeList.querySelectorAll('li').forEach(item => {
+        targets.push(item.firstChild.textContent);
+    });
+
+    if (targets.length === 0) {
+        return;
+    }
+
+    const nowMs = now.getTime();
+
+    let nearestFutureTarget = null;
+    let minDiff = Infinity;
+
+    targets.forEach(target => {
+        const [time, ms] = target.split('.');
+        const [h, m, s] = time.split(':');
+        
+        const targetDate = new Date(now);
+        targetDate.setHours(h, m, s, ms);
+
+        const diff = targetDate.getTime() - nowMs;
+
+        if (diff > 0 && diff < minDiff) {
+            minDiff = diff;
+            nearestFutureTarget = targetDate;
+        }
+    });
+
+    if (nearestFutureTarget && minDiff < 10) { // Check if we are very close to the target time
+        const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(3, '0');
+        if (!triggeredTargets.includes(targetString)) {
+            triggeredTargets.push(targetString);
+            document.body.style.backgroundColor = 'green';
+            setTimeout(() => {
+                document.body.style.backgroundColor = '#000';
+                // Remove the triggered target from the list so it doesn't trigger again
+                const index = triggeredTargets.indexOf(targetString);
+                if (index > -1) {
+                    triggeredTargets.splice(index, 1);
+                }
+            }, 5000);
+        }
+    }
+}
+
 function updateClock() {
     let now = new Date();
     if (shouldUseServerTime) {
@@ -138,6 +187,8 @@ function updateClock() {
 
     const timeString = `${hours}:${minutes}:${seconds}.${milliseconds}`;
     document.getElementById('clock').textContent = timeString;
+
+    checkTargetTimes(now);
 }
 
 setInterval(updateClock, 1);
