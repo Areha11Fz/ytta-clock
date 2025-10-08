@@ -128,6 +128,8 @@ addTargetButton.addEventListener('click', () => {
 
 let triggeredTargets = [];
 
+const progressBar = document.getElementById('progress-bar');
+
 function checkTargetTimes(now) {
     const targets = [];
     targetTimeList.querySelectorAll('li').forEach(item => {
@@ -135,6 +137,7 @@ function checkTargetTimes(now) {
     });
 
     if (targets.length === 0) {
+        progressBar.style.width = '0%';
         return;
     }
 
@@ -158,20 +161,32 @@ function checkTargetTimes(now) {
         }
     });
 
-    if (nearestFutureTarget && minDiff < 10) { // Check if we are very close to the target time
-        const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(3, '0');
-        if (!triggeredTargets.includes(targetString)) {
-            triggeredTargets.push(targetString);
-            document.body.style.backgroundColor = 'green';
-            setTimeout(() => {
-                document.body.style.backgroundColor = '#000';
-                // Remove the triggered target from the list so it doesn't trigger again
-                const index = triggeredTargets.indexOf(targetString);
-                if (index > -1) {
-                    triggeredTargets.splice(index, 1);
-                }
-            }, 5000);
+    if (nearestFutureTarget) {
+        if (minDiff <= 5000) {
+            const progress = (5000 - minDiff) / 5000 * 100;
+            progressBar.style.width = `${progress}%`;
+        } else {
+            progressBar.style.width = '0%';
         }
+
+        if (minDiff < 10) { // Check if we are very close to the target time
+            const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(3, '0');
+            if (!triggeredTargets.includes(targetString)) {
+                triggeredTargets.push(targetString);
+                document.body.style.backgroundColor = 'green';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#000';
+                    // Remove the triggered target from the list so it doesn't trigger again
+                    const index = triggeredTargets.indexOf(targetString);
+                    if (index > -1) {
+                        triggeredTargets.splice(index, 1);
+                    }
+                }, 5000);
+            }
+        }
+    } else {
+        progressBar.style.width = '0%';
     }
 }
 

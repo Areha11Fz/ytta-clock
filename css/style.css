@@ -9,6 +9,17 @@ body {
     margin: 0;
 }
 
+#progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: yellow;
+    z-index: -1;
+    transition: width 0.1s linear;
+}
+
 .clock-container {
     text-align: center;
 }
