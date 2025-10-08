@@ -5,7 +5,16 @@ let triggeredTargets = [];
 const progressBar = document.getElementById('progress-bar');
 const targetTimeList = document.getElementById('target-time-list');
 
-function checkTargetTimes(now) {
+function debugProgressBar() {
+    const now = new Date();
+    const seconds = now.getSeconds();
+    const milliseconds = now.getMilliseconds();
+    const totalMs = (seconds * 1000 + milliseconds) % 5000; // Loop every 5 seconds
+    const progress = (totalMs / 5000) * 100;
+    progressBar.style.width = `${progress}%`;
+}
+
+export function checkTargetTimes(now) {
     const targets = [];
     targetTimeList.querySelectorAll('li').forEach(item => {
         const spans = item.querySelectorAll('span.editable');
@@ -78,10 +87,14 @@ export function updateClock() {
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
-    const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
+    const milliseconds = Math.floor(now.getMilliseconds() / 10).toString().padStart(2, '0');
 
     const timeString = `${hours}:${minutes}:${seconds}.${milliseconds}`;
-    document.getElementById('clock').textContent = timeString;
+    document.getElementById('clock-text').textContent = timeString;
 
-    checkTargetTimes(now);
+    if (getFromStorage(LOCAL_STORAGE_KEYS.debugProgressBar) === 'true') {
+        debugProgressBar();
+    } else {
+        checkTargetTimes(now);
+    }
 }

@@ -1,4 +1,6 @@
 import { LOCAL_STORAGE_KEYS, saveToStorage, getFromStorage } from './storage.js';
+import { checkTargetTimes } from './clock.js';
+
 
 const targetTimeList = document.getElementById('target-time-list');
 const addTargetButton = document.getElementById('add-target-button');
@@ -23,6 +25,7 @@ function createEditableSpan(value, padLength) {
             input.replaceWith(newSpan);
             saveTargets();
             sortTargetList();
+            checkTargetTimes(new Date());
         });
 
         input.addEventListener('keydown', (e) => {

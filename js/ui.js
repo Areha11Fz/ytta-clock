@@ -15,14 +15,17 @@ export function updateSubtitle(timeOffset) {
 
 export function initUI() {
     const serverTimeToggle = document.getElementById('server-time-toggle');
+    const debugProgressBarToggle = document.getElementById('debug-progress-bar');
     const syncNowButton = document.getElementById('sync-now-button');
     const settingsIcon = document.querySelector('.settings-icon');
     const modal = document.getElementById('settings-modal');
     const closeButton = document.querySelector('.close-button');
 
     let shouldUseServerTime = getFromStorage(LOCAL_STORAGE_KEYS.useServerTime) === null ? true : getFromStorage(LOCAL_STORAGE_KEYS.useServerTime) === 'true';
+    let isDebugMode = getFromStorage(LOCAL_STORAGE_KEYS.debugProgressBar) === 'true';
 
     serverTimeToggle.checked = shouldUseServerTime;
+    debugProgressBarToggle.checked = isDebugMode;
 
     syncNowButton.addEventListener('click', getOffset);
 
@@ -32,6 +35,11 @@ export function initUI() {
         if (shouldUseServerTime) {
             getOffset();
         }
+    });
+
+    debugProgressBarToggle.addEventListener('change', () => {
+        isDebugMode = debugProgressBarToggle.checked;
+        saveToStorage(LOCAL_STORAGE_KEYS.debugProgressBar, isDebugMode);
     });
 
     settingsIcon.addEventListener('click', () => {

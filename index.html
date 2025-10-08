@@ -9,10 +9,12 @@
 </head>
 
 <body>
-    <div id="progress-bar"></div>
     <div class="settings-icon">&#9881;</div>
     <div class="clock-container">
-        <div id="clock"></div>
+        <div id="clock">
+            <div id="progress-bar"></div>
+            <span id="clock-text"></span>
+        </div>
     </div>
 
     <div id="settings-modal" class="modal">
@@ -22,6 +24,10 @@
             <div class="setting">
                 <label for="server-time-toggle">Use server time</label>
                 <input type="checkbox" id="server-time-toggle">
+            </div>
+            <div class="setting">
+                <label for="debug-progress-bar">Debug Progress Bar</label>
+                <input type="checkbox" id="debug-progress-bar">
             </div>
             <p id="offset-subtitle"></p>
             <button id="sync-now-button">Sync Now</button>
