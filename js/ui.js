@@ -45,6 +45,15 @@ export function initUI() {
     settingsIcon.addEventListener('click', () => {
         modal.style.display = 'block';
         setTimeout(() => modal.classList.add('modal-open'), 10);
+
+        const now = new Date();
+        const hour = now.getHours().toString().padStart(2, '0');
+        const minute = now.getMinutes().toString().padStart(2, '0');
+        const second = now.getSeconds().toString().padStart(2, '0');
+
+        document.getElementById('target-hour').value = hour;
+        document.getElementById('target-minute').value = minute;
+        document.getElementById('target-second').value = second;
     });
 
     closeButton.addEventListener('click', () => {

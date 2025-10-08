@@ -67,7 +67,7 @@ export function checkTargetTimes(now) {
         const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
         const timeString = nearestFutureTarget.toLocaleTimeString('en-US', options);
         const msString = nearestFutureTarget.getMilliseconds().toString().padStart(3, '0').substring(0, 2);
-        nextTargetTimeElement.textContent = `Next: ${timeString}.${msString}`;
+        nextTargetTimeElement.textContent = `${timeString}.${msString}`;
 
         if (minDiff <= 5000) {
             const progress = (5000 - minDiff) / 5000 * 100;
