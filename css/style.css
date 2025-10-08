@@ -27,6 +27,9 @@ body {
 #clock {
     font-size: 5rem;
     letter-spacing: 2px;
+    border: 2px solid white;
+    padding: 20px;
+    background-color: #000;
 }
 
 .settings-icon {

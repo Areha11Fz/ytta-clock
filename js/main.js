@@ -239,10 +239,10 @@ function checkTargetTimes(now) {
             const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(3, '0');
             if (!triggeredTargets.includes(targetString)) {
                 triggeredTargets.push(targetString);
-                document.body.style.backgroundColor = 'green';
+                document.getElementById('clock').style.backgroundColor = 'green';
                 progressBar.style.width = '0%';
                 setTimeout(() => {
-                    document.body.style.backgroundColor = '#000';
+                    document.getElementById('clock').style.backgroundColor = '#000';
                     // Remove the triggered target from the list so it doesn't trigger again
                     const index = triggeredTargets.indexOf(targetString);
                     if (index > -1) {
