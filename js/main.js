@@ -99,6 +99,17 @@ function loadTargets() {
         const listItem = createTargetListItem(targetText);
         targetTimeList.appendChild(listItem);
     });
+    sortTargetList();
+}
+
+function sortTargetList() {
+    const items = Array.from(targetTimeList.children);
+    items.sort((a, b) => {
+        const timeA = a.textContent.replace(/[.:×]/g, '');
+        const timeB = b.textContent.replace(/[.:×]/g, '');
+        return timeA.localeCompare(timeB);
+    });
+    items.forEach(item => targetTimeList.appendChild(item));
 }
 
 function createTargetListItem(targetText) {
@@ -150,6 +161,7 @@ function createEditableSpan(value, padLength) {
             const newSpan = createEditableSpan(newValue, padLength);
             input.replaceWith(newSpan);
             saveTargets();
+            sortTargetList();
         });
 
         input.addEventListener('keydown', (e) => {
@@ -173,6 +185,7 @@ addTargetButton.addEventListener('click', () => {
     const listItem = createTargetListItem(timeString);
     targetTimeList.appendChild(listItem);
     saveTargets();
+    sortTargetList();
 });
 
 let triggeredTargets = [];
