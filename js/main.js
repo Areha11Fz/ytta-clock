@@ -1,6 +1,7 @@
 const LOCAL_STORAGE_KEYS = {
     useServerTime: 'ytta-clock-use-server-time',
-    timeOffset: 'ytta-clock-time-offset'
+    timeOffset: 'ytta-clock-time-offset',
+    targetTimes: 'ytta-clock-target-times'
 };
 
 let shouldUseServerTime = localStorage.getItem(LOCAL_STORAGE_KEYS.useServerTime) === null ? true : localStorage.getItem(LOCAL_STORAGE_KEYS.useServerTime) === 'true';
@@ -53,6 +54,7 @@ window.addEventListener('load', () => {
         getOffset();
     }
     updateSubtitle();
+    loadTargets();
 });
 
 const settingsIcon = document.querySelector('.settings-icon');
@@ -74,6 +76,54 @@ window.addEventListener('click', (event) => {
         modal.classList.remove('modal-open');
         setTimeout(() => modal.style.display = 'none', 300);
     }
+});
+
+const addTargetButton = document.getElementById('add-target-button');
+const targetTimeList = document.getElementById('target-time-list');
+
+function saveTargets() {
+    const targets = [];
+    targetTimeList.querySelectorAll('li').forEach(item => {
+        targets.push(item.firstChild.textContent);
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEYS.targetTimes, JSON.stringify(targets));
+}
+
+function loadTargets() {
+    const targets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.targetTimes)) || [];
+    targets.forEach(targetText => {
+        const listItem = createTargetListItem(targetText);
+        targetTimeList.appendChild(listItem);
+    });
+}
+
+function createTargetListItem(targetText) {
+    const listItem = document.createElement('li');
+    listItem.textContent = targetText;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = '×';
+    deleteButton.classList.add('delete-target-button');
+    deleteButton.addEventListener('click', () => {
+        listItem.remove();
+        saveTargets();
+    });
+
+    listItem.appendChild(deleteButton);
+    return listItem;
+}
+
+addTargetButton.addEventListener('click', () => {
+    const hour = document.getElementById('target-hour').value.padStart(2, '0');
+    const minute = document.getElementById('target-minute').value.padStart(2, '0');
+    const second = document.getElementById('target-second').value.padStart(2, '0');
+    const millisecond = document.getElementById('target-millisecond').value.padStart(3, '0');
+
+    const timeString = `${hour}:${minute}:${second}.${millisecond}`;
+
+    const listItem = createTargetListItem(timeString);
+    targetTimeList.appendChild(listItem);
+    saveTargets();
 });
 
 function updateClock() {

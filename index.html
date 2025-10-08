@@ -22,6 +22,18 @@
             </div>
             <p id="offset-subtitle"></p>
             <button id="sync-now-button">Sync Now</button>
+
+            <div class="schedule-target">
+                <h3>Schedule Target</h3>
+                <ul id="target-time-list"></ul>
+                <div class="target-inputs">
+                    <input type="number" id="target-hour" value="11" min="0" max="23" placeholder="HH">
+                    <input type="number" id="target-minute" value="59" min="0" max="59" placeholder="MM">
+                    <input type="number" id="target-second" value="59" min="0" max="59" placeholder="SS">
+                    <input type="number" id="target-millisecond" value="300" min="0" max="999" placeholder="ms">
+                </div>
+                <button id="add-target-button">Add</button>
+            </div>
         </div>
     </div>
 

@@ -98,3 +98,59 @@ body {
 #sync-now-button:hover {
     background-color: #555;
 }
+
+.schedule-target {
+    margin-top: 20px;
+}
+
+.target-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.target-inputs input {
+    width: 60px;
+    padding: 5px;
+    background-color: #333;
+    border: 1px solid #666;
+    color: #fff;
+    text-align: center;
+}
+
+
+#target-time-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+#add-target-button {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#add-target-button:hover {
+    background-color: #555;
+}
+
+.delete-target-button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+#target-time-list li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+}
