@@ -27,6 +27,12 @@ body {
   z-index: 0;
 }
 
+#next-target-time {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  height: 1.5rem; /* Reserve space to prevent layout shift */
+}
+
 #clock {
   position: relative;
   font-size: 5rem;

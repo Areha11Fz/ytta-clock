@@ -11,6 +11,7 @@
 <body>
     <div class="settings-icon">&#9881;</div>
     <div class="clock-container">
+        <div id="next-target-time"></div>
         <div id="clock">
             <div id="progress-bar"></div>
             <span id="clock-text"></span>
@@ -39,7 +40,7 @@
                     <input type="number" id="target-hour" value="11" min="0" max="23" placeholder="HH">
                     <input type="number" id="target-minute" value="59" min="0" max="59" placeholder="MM">
                     <input type="number" id="target-second" value="59" min="0" max="59" placeholder="SS">
-                    <input type="number" id="target-millisecond" value="300" min="0" max="999" placeholder="ms">
+                    <input type="number" id="target-millisecond" value="30" min="0" max="99" placeholder="ms">
                 </div>
                 <button id="add-target-button">Add</button>
             </div>

@@ -4,6 +4,7 @@ import { getFromStorage, LOCAL_STORAGE_KEYS } from './storage.js';
 let triggeredTargets = [];
 const progressBar = document.getElementById('progress-bar');
 const targetTimeList = document.getElementById('target-time-list');
+const nextTargetTimeElement = document.getElementById('next-target-time');
 
 function debugProgressBar() {
     const now = new Date();
@@ -26,6 +27,7 @@ export function checkTargetTimes(now) {
 
     if (targets.length === 0) {
         progressBar.style.width = '0%';
+        nextTargetTimeElement.textContent = '';
         return;
     }
 
@@ -35,21 +37,38 @@ export function checkTargetTimes(now) {
     let minDiff = Infinity;
 
     targets.forEach(target => {
-        const [time, ms] = target.split('.');
+        const [time, msPart] = target.split('.');
         const [h, m, s] = time.split(':');
+        const ms = msPart.padEnd(3, '0');
 
-        const targetDate = new Date(now);
-        targetDate.setHours(h, m, s, ms);
+        // Target for today
+        const targetDateToday = new Date(now);
+        targetDateToday.setHours(h, m, s, ms);
+        const diffToday = targetDateToday.getTime() - nowMs;
 
-        const diff = targetDate.getTime() - nowMs;
+        if (diffToday > 0 && diffToday < minDiff) {
+            minDiff = diffToday;
+            nearestFutureTarget = targetDateToday;
+        }
 
-        if (diff > 0 && diff < minDiff) {
-            minDiff = diff;
-            nearestFutureTarget = targetDate;
+        // Target for tomorrow
+        const targetDateTomorrow = new Date(now);
+        targetDateTomorrow.setDate(targetDateTomorrow.getDate() + 1);
+        targetDateTomorrow.setHours(h, m, s, ms);
+        const diffTomorrow = targetDateTomorrow.getTime() - nowMs;
+
+        if (diffTomorrow > 0 && diffTomorrow < minDiff) {
+            minDiff = diffTomorrow;
+            nearestFutureTarget = targetDateTomorrow;
         }
     });
 
     if (nearestFutureTarget) {
+        const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const timeString = nearestFutureTarget.toLocaleTimeString('en-US', options);
+        const msString = nearestFutureTarget.getMilliseconds().toString().padStart(3, '0').substring(0, 2);
+        nextTargetTimeElement.textContent = `Next: ${timeString}.${msString}`;
+
         if (minDiff <= 5000) {
             const progress = (5000 - minDiff) / 5000 * 100;
             progressBar.style.width = `${progress}%`;
@@ -58,7 +77,7 @@ export function checkTargetTimes(now) {
         }
 
         if (minDiff < 10) { // Check if we are very close to the target time
-            const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(3, '0');
+            const targetString = nearestFutureTarget.toTimeString().split(' ')[0] + '.' + nearestFutureTarget.getMilliseconds().toString().padStart(2, '0');
             if (!triggeredTargets.includes(targetString)) {
                 triggeredTargets.push(targetString);
                 document.getElementById('clock').style.backgroundColor = 'green';
@@ -75,6 +94,7 @@ export function checkTargetTimes(now) {
         }
     } else {
         progressBar.style.width = '0%';
+        nextTargetTimeElement.textContent = '';
     }
 }
 

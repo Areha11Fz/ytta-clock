@@ -46,7 +46,7 @@ function createTargetListItem(targetText) {
     const hourSpan = createEditableSpan(timeParts[0], 2);
     const minuteSpan = createEditableSpan(timeParts[1], 2);
     const secondSpan = createEditableSpan(timeParts[2], 2);
-    const millisecondSpan = createEditableSpan(timeParts[3], 3);
+    const millisecondSpan = createEditableSpan(timeParts[3], 2);
 
     listItem.appendChild(hourSpan);
     listItem.appendChild(document.createTextNode(':'));
@@ -62,6 +62,7 @@ function createTargetListItem(targetText) {
     deleteButton.addEventListener('click', () => {
         listItem.remove();
         saveTargets();
+        checkTargetTimes(new Date());
     });
 
     listItem.appendChild(deleteButton);
@@ -88,6 +89,7 @@ export function saveTargets() {
         }
     });
     saveToStorage(LOCAL_STORAGE_KEYS.targetTimes, JSON.stringify(targets));
+    checkTargetTimes(new Date());
 }
 
 export function loadTargets() {
@@ -103,7 +105,7 @@ addTargetButton.addEventListener('click', () => {
     const hour = document.getElementById('target-hour').value.padStart(2, '0');
     const minute = document.getElementById('target-minute').value.padStart(2, '0');
     const second = document.getElementById('target-second').value.padStart(2, '0');
-    const millisecond = document.getElementById('target-millisecond').value.padStart(3, '0');
+    const millisecond = document.getElementById('target-millisecond').value.padStart(2, '0');
 
     const timeString = `${hour}:${minute}:${second}.${millisecond}`;
 
@@ -111,4 +113,5 @@ addTargetButton.addEventListener('click', () => {
     targetTimeList.appendChild(listItem);
     saveTargets();
     sortTargetList();
+    checkTargetTimes(new Date());
 });
